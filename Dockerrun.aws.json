@@ -1,17 +1,12 @@
 {
-  "AWSEBDockerrunVersion": 2,
-  "containerDefinitions": [
+  "AWSEBDockerrunVersion": 1,
+  "Image": {
+    "Name": "393455371269.dkr.ecr.sa-east-1.amazonaws.com/etraining-backend:latest",
+    "Update": "true"
+  },
+  "Ports": [
     {
-      "name": "etraining-backend",
-      "image": "393455371269.dkr.ecr.sa-east-1.amazonaws.com/etraining-backend:latest",
-      "essential": true,
-      "memory": 128,
-      "portMappings": [
-        {
-          "hostPort": 5000,
-          "containerPort": 5000
-        }
-      ]
+      "ContainerPort": 5000
     }
   ]
 }
