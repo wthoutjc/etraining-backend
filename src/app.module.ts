@@ -3,9 +3,10 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { CoursesModule } from './courses/courses.module';
 import { UserCourseModule } from './user-course/user-course.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, PrismaModule, CoursesModule, UserCourseModule],
+  imports: [AuthModule, UsersModule, PrismaModule, CoursesModule, UserCourseModule],
   controllers: [],
   providers: [],
 })

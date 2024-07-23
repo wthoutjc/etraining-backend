@@ -1,7 +1,8 @@
-import { IsString, IsEmail, IsOptional, IsEnum, IsPhoneNumber } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsEnum, IsNumber } from 'class-validator';
 import { Role } from '../../core/enums/role.enum';
+import { Type } from 'class-transformer';
 
-export class CreateUserDto {
+export class UserDto {
   @IsString()
   first_name: string;
 
@@ -11,13 +12,20 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-  @IsPhoneNumber(null)
+  @IsString()
   phone: string;
 
   @IsOptional()
+  @Type(() => Date)
   @IsString()
   verified_email_at?: Date;
 
   @IsEnum(Role)
   role: string;
+}
+
+export class CreateUserDto extends UserDto {
+  @IsNumber()
+  @Type(() => Number)
+  course_id: number;
 }

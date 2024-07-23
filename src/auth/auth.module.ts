@@ -5,13 +5,17 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import configurations, {
-  configRoot,
-} from 'src/core/configurations/configurations';
+import configurations, { configRoot } from 'src/core/configurations/configurations';
 import { LocalStrategy } from './strategies/local.strategy';
+import { UsersService } from 'src/users/users.service';
+import { UsersModule } from 'src/users/users.module';
+import { UsersRepository } from 'src/users/users.repository';
+import { UserCourseRepository } from 'src/user-course/user-course.repository';
+import { UserCourseService } from 'src/user-course/user-course.service';
 
 @Module({
   imports: [
+    UsersModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule.forRoot(configRoot())],
@@ -24,7 +28,15 @@ import { LocalStrategy } from './strategies/local.strategy';
       },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    UsersService,
+    UsersRepository,
+    UserCourseRepository,
+    UserCourseService,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

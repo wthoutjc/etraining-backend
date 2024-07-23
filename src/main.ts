@@ -1,10 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import helmet from 'helmet';
 import fmp from '@fastify/multipart';
 import * as dayjs from 'dayjs';
@@ -31,23 +28,19 @@ async function bootstrap() {
     },
   });
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    fastifyAdapter,
-  );
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter);
 
   app.use(
     helmet({
-      contentSecurityPolicy:
-        process.env.NODE_ENV === 'production' ? true : false,
-    }),
+      contentSecurityPolicy: process.env.NODE_ENV === 'production' ? true : false,
+    })
   );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.enableCors();
 
-  await app.listen(3004, '0.0.0.0');
+  await app.listen(5000, '0.0.0.0');
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
