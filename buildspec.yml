@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 20
+    commands:
+      - echo Installing dependencies...
+      - npm install
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin 393455371269.dkr.ecr.sa-east-1.amazonaws.com)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t etraining-backend .
+      - docker tag etraining-backend:latest 393455371269.dkr.ecr.sa-east-1.amazonaws.com/etraining-backend:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 393455371269.dkr.ecr.sa-east-1.amazonaws.com/etraining-backend:latest
+artifacts:
+  files:
+    - Dockerrun.aws.json
