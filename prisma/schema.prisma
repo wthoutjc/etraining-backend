@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  users User[]
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  courses Course[]
+}
+
+model Modality {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  courses Course[]
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category_id Int
+  modality_id Int
+  duration    Int
+  couta       Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category     Category     @relation(fields: [category_id], references: [id])
+  modality     Modality     @relation(fields: [modality_id], references: [id])
+  user_courses UserCourse[]
+
+  @@index([category_id], name: "category_id")
+  @@index([modality_id], name: "modality_id")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  first_name        String
+  last_name         String
+  email             String
+  phone             String
+  verified_email_at DateTime?
+  role_id           Int
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+
+  role         Role         @relation(fields: [role_id], references: [id])
+  user_courses UserCourse[]
+
+  @@index([role_id], name: "role_id")
+}
+
+model InscriptionStatus {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_courses UserCourse[]
+}
+
+model UserCourse {
+  id                    Int      @id @default(autoincrement())
+  user_id               Int
+  course_id             Int
+  inscription_status_id Int
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  user               User              @relation(fields: [user_id], references: [id])
+  course             Course            @relation(fields: [course_id], references: [id])
+  inscription_status InscriptionStatus @relation(fields: [inscription_status_id], references: [id])
+
+  @@index([user_id], name: "user_id")
+  @@index([course_id], name: "course_id")
+  @@index([inscription_status_id], name: "inscription_status_id")
+}
